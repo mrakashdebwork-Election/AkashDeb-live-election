@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>WB Election Level 5 Pro Max | By AkashDeb</title>
+<title>WB Election FINAL BOSS Control Room | By AkashDeb</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -14,28 +14,33 @@ body{
   padding:20px;
 }
 
-h1{
-  margin-bottom:5px;
-}
+h1{margin-bottom:5px;}
 
 .brand{
-  font-size:14px;
+  font-size:13px;
   color:#22c55e;
-  margin-bottom:10px;
 }
 
+/* PHASE */
+.phase{
+  margin:10px;
+  font-weight:bold;
+  color:#f59e0b;
+}
+
+/* SUMMARY */
 .summary{
   display:flex;
   justify-content:center;
-  gap:10px;
   flex-wrap:wrap;
+  gap:10px;
 }
 
 .box{
   background:#1e293b;
   padding:10px;
   border-radius:10px;
-  min-width:120px;
+  min-width:110px;
 }
 
 .seats{
@@ -44,18 +49,41 @@ h1{
   color:#22c55e;
 }
 
-.container{
+/* LAYOUT */
+.wrapper{
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
-  gap:10px;
+  gap:15px;
+  margin-top:10px;
 }
 
-.card{
+/* GRID MAP */
+.map{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:5px;
+  max-width:450px;
+}
+
+.seat{
+  background:#1e293b;
+  padding:6px;
+  border-radius:6px;
+  font-size:10px;
+  cursor:pointer;
+}
+
+.seat:hover{
+  background:#334155;
+}
+
+/* DETAIL */
+.detail{
   background:#1e293b;
   padding:15px;
   border-radius:12px;
-  width:300px;
+  width:320px;
   text-align:left;
 }
 
@@ -64,6 +92,7 @@ h1{
   font-weight:bold;
 }
 
+/* BAR */
 .bar{
   height:6px;
   background:#334155;
@@ -79,6 +108,7 @@ h1{
   transition:0.8s;
 }
 
+/* BUTTON */
 button{
   margin:10px;
   padding:10px 20px;
@@ -89,9 +119,16 @@ button{
   cursor:pointer;
 }
 
+/* PREDICTION */
+.pred{
+  font-size:12px;
+  margin-top:5px;
+  color:#38bdf8;
+}
+
 /* FOOTER */
 footer{
-  margin-top:25px;
+  margin-top:20px;
   font-size:12px;
   color:#94a3b8;
 }
@@ -100,11 +137,13 @@ footer{
 
 <body>
 
-<h1>📊 WB Election Level 5 Pro Max</h1>
+<h1>📊 WB Election FINAL BOSS Control Room</h1>
 
 <div class="brand">
 By - <b>AkashDeb</b> | Instagram - @AkashDebX
 </div>
+
+<div class="phase" id="phase">🟡 Counting Phase 1</div>
 
 <div class="summary">
   <div class="box">TMC <div class="seats" id="tmc">0</div></div>
@@ -113,48 +152,107 @@ By - <b>AkashDeb</b> | Instagram - @AkashDebX
   <div class="box">CONG <div class="seats" id="cong">0</div></div>
 </div>
 
-<button onclick="render()">Refresh Live</button>
+<button onclick="render()">Refresh LIVE</button>
 
-<div id="results" class="container"></div>
+<div class="wrapper">
+
+  <div class="map" id="map"></div>
+
+  <div class="detail" id="detail">
+    <h3>📍 Select Seat</h3>
+    <p>Click any seat to view AI analysis</p>
+  </div>
+
+</div>
 
 <footer>
-WB Election Level 5 Pro Max © 2026 <br>
-Developed by <b>AkashDeb</b> <br>
-Instagram: @AkashDebX
+WB Election FINAL BOSS Control Room © 2026 <br>
+Developed by <b>AkashDeb</b> | @AkashDebX
 </footer>
 
 <script>
 
-const districts=[
-"Kolkata","Howrah","Hooghly","North 24 Parganas","South 24 Parganas",
-"Nadia","Murshidabad","Malda","Birbhum","Bardhaman",
-"Purulia","Bankura","Jalpaiguri","Darjeeling","Cooch Behar",
-"Alipurduar","Uttar Dinajpur","Dakshin Dinajpur","Medinipur East",
-"Medinipur West","Jhargram","Kalimpong","Asansol"
-];
+const seats = Array.from({length:48},(_,i)=>"Seat "+(i+1));
 
-function votes(){
-  return{
-    TMC:Math.floor(Math.random()*50000+20000),
-    BJP:Math.floor(Math.random()*50000+20000),
-    CPIM:Math.floor(Math.random()*20000+5000),
-    CONG:Math.floor(Math.random()*15000+3000)
-  };
+let dataStore={};
+
+let base={
+  TMC:120,
+  BJP:110,
+  CPIM:40,
+  CONG:24
+};
+
+function swing(val){
+  return val + Math.floor(Math.random()*5 - 2); // smarter swing
+}
+
+function buildMap(){
+  let map=document.getElementById("map");
+  map.innerHTML="";
+
+  seats.forEach(s=>{
+    let div=document.createElement("div");
+    div.className="seat";
+    div.innerText=s;
+    div.onclick=()=>showDetail(s);
+    map.appendChild(div);
+  });
+}
+
+function showDetail(s){
+
+  let v=dataStore[s];
+
+  let arr=[
+    {p:"TMC",v:v.TMC},
+    {p:"BJP",v:v.BJP},
+    {p:"CPIM",v:v.CPIM},
+    {p:"CONG",v:v.CONG}
+  ];
+
+  arr.sort((a,b)=>b.v-a.v);
+
+  let max=arr[0].v;
+
+  let total = v.TMC+v.BJP+v.CPIM+v.CONG;
+
+  let winProb = Math.round((arr[0].v/total)*100);
+
+  let html=`
+    <h3>📍 ${s}</h3>
+    <p class="lead">🏆 Winner: ${arr[0].p}</p>
+    <div class="pred">📊 Win Probability: ${winProb}%</div>
+  `;
+
+  arr.forEach(x=>{
+    let percent=(x.v/max)*100;
+
+    html+=`
+      <div>${x.p} - ${x.v}</div>
+      <div class="bar"><div class="fill" style="width:${percent}%"></div></div>
+    `;
+  });
+
+  document.getElementById("detail").innerHTML=html;
 }
 
 function render(){
 
   let total={TMC:0,BJP:0,CPIM:0,CONG:0};
-  let html="";
 
-  districts.forEach(d=>{
+  dataStore={};
 
-    let v=votes();
+  seats.forEach(s=>{
 
-    total.TMC+=v.TMC;
-    total.BJP+=v.BJP;
-    total.CPIM+=v.CPIM;
-    total.CONG+=v.CONG;
+    let v={
+      TMC:swing(base.TMC),
+      BJP:swing(base.BJP),
+      CPIM:swing(base.CPIM),
+      CONG:swing(base.CONG)
+    };
+
+    dataStore[s]=v;
 
     let arr=[
       {p:"TMC",v:v.TMC},
@@ -165,37 +263,29 @@ function render(){
 
     arr.sort((a,b)=>b.v-a.v);
 
-    let winner=arr[0].p;
-    let max=arr[0].v;
-
-    html+=`
-      <div class="card">
-        <h3>${d}</h3>
-        <p class="lead">🏆 Leading: ${winner}</p>
-    `;
-
-    arr.forEach(x=>{
-      let percent=(x.v/max)*100;
-
-      html+=`
-        <div>${x.p} - ${x.v}</div>
-        <div class="bar"><div class="fill" style="width:${percent}%"></div></div>
-      `;
-    });
-
-    html+=`</div>`;
+    total[arr[0].p]++;
   });
-
-  document.getElementById("results").innerHTML=html;
 
   document.getElementById("tmc").innerText=total.TMC;
   document.getElementById("bjp").innerText=total.BJP;
   document.getElementById("cpim").innerText=total.CPIM;
   document.getElementById("cong").innerText=total.CONG;
+
+  // PHASE SYSTEM
+  let phase=document.getElementById("phase");
+
+  if(total.TMC>total.BJP){
+    phase.innerText="🔴 Phase 3 - TMC Leading";
+  } else if(total.BJP>total.TMC){
+    phase.innerText="🟠 Phase 3 - BJP Leading";
+  } else {
+    phase.innerText="🟡 Phase 2 - Close Fight";
+  }
 }
 
+buildMap();
 render();
-setInterval(render,5000);
+setInterval(render,4000);
 
 </script>
 
