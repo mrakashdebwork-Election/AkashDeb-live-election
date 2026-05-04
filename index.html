@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>WB Election Level 5 Pro Max</title>
+<title>WB Election Level 5 Pro Max | By AkashDeb</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -14,15 +14,16 @@ body{
   padding:20px;
 }
 
-h1{margin-bottom:5px;}
+h1{
+  margin-bottom:5px;
+}
 
-.live{
+.brand{
+  font-size:14px;
   color:#22c55e;
-  font-weight:bold;
   margin-bottom:10px;
 }
 
-/* Summary */
 .summary{
   display:flex;
   justify-content:center;
@@ -34,7 +35,7 @@ h1{margin-bottom:5px;}
   background:#1e293b;
   padding:10px;
   border-radius:10px;
-  min-width:110px;
+  min-width:120px;
 }
 
 .seats{
@@ -43,7 +44,6 @@ h1{margin-bottom:5px;}
   color:#22c55e;
 }
 
-/* Layout */
 .container{
   display:flex;
   flex-wrap:wrap;
@@ -51,18 +51,12 @@ h1{margin-bottom:5px;}
   gap:10px;
 }
 
-/* Card */
 .card{
   background:#1e293b;
   padding:15px;
   border-radius:12px;
   width:300px;
-  cursor:pointer;
-  transition:0.3s;
-}
-
-.card:hover{
-  transform:scale(1.03);
+  text-align:left;
 }
 
 .lead{
@@ -70,7 +64,6 @@ h1{margin-bottom:5px;}
   font-weight:bold;
 }
 
-/* Bars */
 .bar{
   height:6px;
   background:#334155;
@@ -86,21 +79,6 @@ h1{margin-bottom:5px;}
   transition:0.8s;
 }
 
-/* Pie Chart */
-.pie{
-  margin:20px auto;
-  width:160px;
-  height:160px;
-  border-radius:50%;
-  background:conic-gradient(
-    #22c55e 0%,
-    #3b82f6 0%,
-    #ef4444 0%,
-    #f59e0b 0%
-  );
-}
-
-/* Buttons */
 button{
   margin:10px;
   padding:10px 20px;
@@ -110,13 +88,23 @@ button{
   color:white;
   cursor:pointer;
 }
+
+/* FOOTER */
+footer{
+  margin-top:25px;
+  font-size:12px;
+  color:#94a3b8;
+}
 </style>
 </head>
 
 <body>
 
 <h1>📊 WB Election Level 5 Pro Max</h1>
-<div class="live">🔴 LIVE COUNTING ACTIVE</div>
+
+<div class="brand">
+By - <b>AkashDeb</b> | Instagram - @AkashDebX
+</div>
 
 <div class="summary">
   <div class="box">TMC <div class="seats" id="tmc">0</div></div>
@@ -125,11 +113,15 @@ button{
   <div class="box">CONG <div class="seats" id="cong">0</div></div>
 </div>
 
-<div class="pie" id="pie"></div>
-
 <button onclick="render()">Refresh Live</button>
 
-<div class="container" id="results"></div>
+<div id="results" class="container"></div>
+
+<footer>
+WB Election Level 5 Pro Max © 2026 <br>
+Developed by <b>AkashDeb</b> <br>
+Instagram: @AkashDebX
+</footer>
 
 <script>
 
@@ -153,12 +145,16 @@ function votes(){
 function render(){
 
   let total={TMC:0,BJP:0,CPIM:0,CONG:0};
-  let seats={TMC:0,BJP:0,CPIM:0,CONG:0};
   let html="";
 
   districts.forEach(d=>{
 
     let v=votes();
+
+    total.TMC+=v.TMC;
+    total.BJP+=v.BJP;
+    total.CPIM+=v.CPIM;
+    total.CONG+=v.CONG;
 
     let arr=[
       {p:"TMC",v:v.TMC},
@@ -170,19 +166,12 @@ function render(){
     arr.sort((a,b)=>b.v-a.v);
 
     let winner=arr[0].p;
-    seats[winner]++;
-
-    total.TMC+=v.TMC;
-    total.BJP+=v.BJP;
-    total.CPIM+=v.CPIM;
-    total.CONG+=v.CONG;
-
     let max=arr[0].v;
 
     html+=`
       <div class="card">
         <h3>${d}</h3>
-        <p class="lead">🏆 Winner: ${winner}</p>
+        <p class="lead">🏆 Leading: ${winner}</p>
     `;
 
     arr.forEach(x=>{
@@ -199,26 +188,10 @@ function render(){
 
   document.getElementById("results").innerHTML=html;
 
-  document.getElementById("tmc").innerText=seats.TMC;
-  document.getElementById("bjp").innerText=seats.BJP;
-  document.getElementById("cpim").innerText=seats.CPIM;
-  document.getElementById("cong").innerText=seats.CONG;
-
-  // PIE CHART (vote share)
-  let totalVotes = total.TMC+total.BJP+total.CPIM+total.CONG;
-
-  let tmcP=(total.TMC/totalVotes)*100;
-  let bjpP=(total.BJP/totalVotes)*100;
-  let cpimP=(total.CPIM/totalVotes)*100;
-  let congP=(total.CONG/totalVotes)*100;
-
-  document.getElementById("pie").style.background=
-    `conic-gradient(
-      #22c55e ${tmcP}%,
-      #3b82f6 ${tmcP}% ${tmcP+bjpP}%,
-      #ef4444 ${tmcP+bjpP}% ${tmcP+bjpP+cpimP}%,
-      #f59e0b ${tmcP+bjpP+cpimP}% 100%
-    )`;
+  document.getElementById("tmc").innerText=total.TMC;
+  document.getElementById("bjp").innerText=total.BJP;
+  document.getElementById("cpim").innerText=total.CPIM;
+  document.getElementById("cong").innerText=total.CONG;
 }
 
 render();
