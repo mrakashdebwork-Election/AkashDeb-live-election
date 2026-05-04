@@ -1,3 +1,46 @@
+Skip to content
+AkashDeb-live-election
+Repository navigation
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security and quality
+Insights
+Settings
+Commit 844fe22
+mrakashdebwork-Election
+mrakashdebwork-Election
+authored
+17 minutes ago
+·
+·
+Verified
+Create index.html
+main
+1 parent 
+467c816
+ commit 
+844fe22
+1 file changed
+
++78
+Lines changed: 78 additions & 0 deletions
+File tree
+Filter files…
+index.html
+Search within code
+ 
+Customizable line height
+The default line height has been increased for improved accessibility. You can choose to enable a more compact line height from the view settings menu.
+
+‎index.html‎
++78
+Lines changed: 78 additions & 0 deletions
+Original file line number	Diff line number	Diff line change
+@@ -0,0 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,35 +87,34 @@
   </style>
 </head>
 <body>
-
 <h1>📊 Live Election Results</h1>
-
 <div class="card">
   <div class="party">TMC</div>
   <div class="seats" id="tmc">Loading...</div>
 </div>
-
 <div class="card">
   <div class="party">BJP</div>
   <div class="seats" id="bjp">Loading...</div>
 </div>
-
 <button onclick="updateResults()">Refresh</button>
-
 <script>
 function updateResults() {
   // Demo random data
   let tmc = Math.floor(Math.random() * (152 - 131 + 1)) + 131;
   let bjp = Math.floor(Math.random() * (159 - 138 + 1)) + 138;
-
   document.getElementById("tmc").innerText = tmc;
   document.getElementById("bjp").innerText = bjp;
 }
-
 // Auto refresh every 5 seconds
 setInterval(updateResults, 5000);
 updateResults();
 </script>
-
 </body>
 </html>
+0 commit comments
+Comments
+0
+ (0)
+Comment
+You're not receiving notifications from this thread.
+
