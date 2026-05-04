@@ -2,77 +2,185 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>WB Live Election Dashboard</title>
+<title>WB Election Level 3 Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
+body{
   font-family: Arial;
-  background: #0f172a;
-  color: white;
-  text-align: center;
-}
-h1 { margin: 20px; }
-
-.card {
-  background: #1e293b;
-  margin: 10px;
-  padding: 15px;
-  border-radius: 12px;
+  background:#0f172a;
+  color:white;
+  text-align:center;
+  padding:20px;
 }
 
-.lead { color: #22c55e; font-weight: bold; }
+h1{margin-bottom:10px;}
+
+.summary{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.box{
+  background:#1e293b;
+  padding:10px;
+  border-radius:10px;
+  min-width:120px;
+}
+
+.seats{
+  font-size:22px;
+  font-weight:bold;
+  color:#22c55e;
+  transition: all 0.5s ease;
+}
+
+.card{
+  background:#1e293b;
+  margin:10px auto;
+  padding:15px;
+  border-radius:12px;
+  max-width:520px;
+  text-align:left;
+}
+
+.lead{
+  color:#22c55e;
+  font-weight:bold;
+}
+
+.party{
+  display:flex;
+  justify-content:space-between;
+  margin:3px 0;
+}
+
+.bar{
+  height:6px;
+  background:#334155;
+  border-radius:5px;
+  margin:4px 0 10px 0;
+  overflow:hidden;
+}
+
+.fill{
+  height:100%;
+  background:#22c55e;
+  width:0%;
+  transition: width 0.8s ease;
+}
+
+button{
+  margin:15px;
+  padding:10px 20px;
+  border:none;
+  border-radius:8px;
+  background:#22c55e;
+  color:white;
+  cursor:pointer;
+}
 </style>
 </head>
 
 <body>
 
-<h1>📊 WB Live Election Dashboard</h1>
+<h1>📊 WB Election Level 3 Live Dashboard</h1>
+
+<div class="summary">
+  <div class="box">TMC <div class="seats" id="tmc">0</div></div>
+  <div class="box">BJP <div class="seats" id="bjp">0</div></div>
+  <div class="box">CPIM <div class="seats" id="cpim">0</div></div>
+  <div class="box">CONG <div class="seats" id="cong">0</div></div>
+</div>
+
+<button onclick="render()">Refresh Live</button>
+
 <div id="results"></div>
 
 <script>
 
-const data = [
-  {
-    district: "Kolkata",
-    results: [
-      {party:"TMC", candidate:"Rahul Sen", votes:45000},
-      {party:"BJP", candidate:"Amit Das", votes:42000},
-      {party:"CPIM", candidate:"Suman Roy", votes:12000}
-    ]
-  },
-  {
-    district: "Howrah",
-    results: [
-      {party:"TMC", candidate:"Ravi Sharma", votes:38000},
-      {party:"BJP", candidate:"Ankit Singh", votes:36000},
-      {party:"CPIM", candidate:"Soham Ghosh", votes:15000}
-    ]
-  }
+const districts=[
+"Kolkata","Howrah","Hooghly","North 24 Parganas","South 24 Parganas",
+"Nadia","Murshidabad","Malda","Birbhum","Bardhaman",
+"Purulia","Bankura","Jalpaiguri","Darjeeling","Cooch Behar",
+"Alipurduar","Uttar Dinajpur","Dakshin Dinajpur","Medinipur East",
+"Medinipur West","Jhargram","Kalimpong","Asansol"
 ];
 
+function getVotes(){
+  return {
+    TMC:Math.floor(Math.random()*50000+20000),
+    BJP:Math.floor(Math.random()*50000+20000),
+    CPIM:Math.floor(Math.random()*20000+5000),
+    CONG:Math.floor(Math.random()*15000+3000)
+  };
+}
+
+function animate(id,value){
+  document.getElementById(id).innerText=value;
+}
+
 function render(){
-  let output = "";
 
-  data.forEach(d => {
-    let sorted = d.results.sort((a,b)=>b.votes-a.votes);
-    let lead = sorted[0].votes - sorted[1].votes;
+  let total={TMC:0,BJP:0,CPIM:0,CONG:0};
+  let html="";
 
-    output += `
-      <div class="card">
-        <h3>${d.district}</h3>
-        <p class="lead">Leading: ${sorted[0].party} (${sorted[0].candidate})</p>
-        <p>Lead: ${lead} votes</p>
-        <hr>
-        ${sorted.map(r => `<p>${r.party} - ${r.candidate}: ${r.votes}</p>`).join("")}
-      </div>
+  districts.forEach(d=>{
+
+    let v=getVotes();
+
+    total.TMC+=v.TMC;
+    total.BJP+=v.BJP;
+    total.CPIM+=v.CPIM;
+    total.CONG+=v.CONG;
+
+    let arr=[
+      {p:"TMC",v:v.TMC},
+      {p:"BJP",v:v.BJP},
+      {p:"CPIM",v:v.CPIM},
+      {p:"CONG",v:v.CONG}
+    ];
+
+    arr.sort((a,b)=>b.v-a.v);
+    let leader=arr[0].p;
+
+    let max=arr[0].v;
+
+    html+=`
+    <div class="card">
+      <h3>${d}</h3>
+      <p class="lead">Leading: ${leader}</p>
     `;
+
+    arr.forEach(x=>{
+      let percent=(x.v/max)*100;
+
+      html+=`
+        <div class="party">
+          <span>${x.p}</span>
+          <span>${x.v}</span>
+        </div>
+        <div class="bar">
+          <div class="fill" style="width:${percent}%"></div>
+        </div>
+      `;
+    });
+
+    html+=`</div>`;
   });
 
-  document.getElementById("results").innerHTML = output;
+  document.getElementById("results").innerHTML=html;
+
+  animate("tmc",total.TMC);
+  animate("bjp",total.BJP);
+  animate("cpim",total.CPIM);
+  animate("cong",total.CONG);
 }
 
 render();
+setInterval(render,5000);
 
 </script>
 
