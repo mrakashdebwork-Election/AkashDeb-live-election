@@ -1,120 +1,80 @@
-Skip to content
-AkashDeb-live-election
-Repository navigation
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security and quality
-Insights
-Settings
-Commit 844fe22
-mrakashdebwork-Election
-mrakashdebwork-Election
-authored
-17 minutes ago
-·
-·
-Verified
-Create index.html
-main
-1 parent 
-467c816
- commit 
-844fe22
-1 file changed
-
-+78
-Lines changed: 78 additions & 0 deletions
-File tree
-Filter files…
-index.html
-Search within code
- 
-Customizable line height
-The default line height has been increased for improved accessibility. You can choose to enable a more compact line height from the view settings menu.
-
-‎index.html‎
-+78
-Lines changed: 78 additions & 0 deletions
-Original file line number	Diff line number	Diff line change
-@@ -0,0 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Live Election Results</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    .card {
-      background: #1e293b;
-      margin: 10px auto;
-      padding: 20px;
-      border-radius: 12px;
-      max-width: 400px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    }
-    .party {
-      font-size: 22px;
-      margin: 10px 0;
-    }
-    .seats {
-      font-size: 28px;
-      font-weight: bold;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      background: #22c55e;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-<h1>📊 Live Election Results</h1>
-<div class="card">
-  <div class="party">TMC</div>
-  <div class="seats" id="tmc">Loading...</div>
-</div>
-<div class="card">
-  <div class="party">BJP</div>
-  <div class="seats" id="bjp">Loading...</div>
-</div>
-<button onclick="updateResults()">Refresh</button>
-<script>
-function updateResults() {
-  // Demo random data
-  let tmc = Math.floor(Math.random() * (152 - 131 + 1)) + 131;
-  let bjp = Math.floor(Math.random() * (159 - 138 + 1)) + 138;
-  document.getElementById("tmc").innerText = tmc;
-  document.getElementById("bjp").innerText = bjp;
+<meta charset="UTF-8">
+<title>WB Live Election Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+  text-align: center;
 }
-// Auto refresh every 5 seconds
-setInterval(updateResults, 5000);
-updateResults();
+h1 { margin: 20px; }
+
+.card {
+  background: #1e293b;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.lead { color: #22c55e; font-weight: bold; }
+</style>
+</head>
+
+<body>
+
+<h1>📊 WB Live Election Dashboard</h1>
+<div id="results"></div>
+
+<script>
+
+const data = [
+  {
+    district: "Kolkata",
+    results: [
+      {party:"TMC", candidate:"Rahul Sen", votes:45000},
+      {party:"BJP", candidate:"Amit Das", votes:42000},
+      {party:"CPIM", candidate:"Suman Roy", votes:12000}
+    ]
+  },
+  {
+    district: "Howrah",
+    results: [
+      {party:"TMC", candidate:"Ravi Sharma", votes:38000},
+      {party:"BJP", candidate:"Ankit Singh", votes:36000},
+      {party:"CPIM", candidate:"Soham Ghosh", votes:15000}
+    ]
+  }
+];
+
+function render(){
+  let output = "";
+
+  data.forEach(d => {
+    let sorted = d.results.sort((a,b)=>b.votes-a.votes);
+    let lead = sorted[0].votes - sorted[1].votes;
+
+    output += `
+      <div class="card">
+        <h3>${d.district}</h3>
+        <p class="lead">Leading: ${sorted[0].party} (${sorted[0].candidate})</p>
+        <p>Lead: ${lead} votes</p>
+        <hr>
+        ${sorted.map(r => `<p>${r.party} - ${r.candidate}: ${r.votes}</p>`).join("")}
+      </div>
+    `;
+  });
+
+  document.getElementById("results").innerHTML = output;
+}
+
+render();
+
 </script>
+
 </body>
 </html>
-0 commit comments
-Comments
-0
- (0)
-Comment
-You're not receiving notifications from this thread.
-
