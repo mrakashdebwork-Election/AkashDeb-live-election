@@ -2,290 +2,157 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>WB Election FINAL BOSS Control Room | By AkashDeb</title>
+<title>Live Election Counting Dashboard | Bengal News Style</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
+  margin:0;
   font-family: Arial;
-  background:#0f172a;
+  background:#0b1220;
   color:white;
-  text-align:center;
-  padding:20px;
 }
 
-h1{margin-bottom:5px;}
-
-.brand{
-  font-size:13px;
-  color:#22c55e;
-}
-
-/* PHASE */
-.phase{
-  margin:10px;
-  font-weight:bold;
-  color:#f59e0b;
-}
-
-/* SUMMARY */
-.summary{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:10px;
-}
-
-.box{
-  background:#1e293b;
+/* TOP BAR */
+.topbar{
+  background:#b91c1c;
   padding:10px;
-  border-radius:10px;
-  min-width:110px;
-}
-
-.seats{
-  font-size:22px;
   font-weight:bold;
-  color:#22c55e;
+  text-align:center;
 }
 
-/* LAYOUT */
-.wrapper{
+/* TICKER */
+.ticker{
+  background:#111827;
+  padding:8px;
+  overflow:hidden;
+  white-space:nowrap;
+}
+
+.ticker span{
+  display:inline-block;
+  animation: move 12s linear infinite;
+  color:#facc15;
+}
+
+@keyframes move{
+  from{transform:translateX(100%);}
+  to{transform:translateX(-100%);}
+}
+
+/* MAIN LAYOUT */
+.container{
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
   gap:15px;
-  margin-top:10px;
-}
-
-/* GRID MAP */
-.map{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:5px;
-  max-width:450px;
-}
-
-.seat{
-  background:#1e293b;
-  padding:6px;
-  border-radius:6px;
-  font-size:10px;
-  cursor:pointer;
-}
-
-.seat:hover{
-  background:#334155;
-}
-
-/* DETAIL */
-.detail{
-  background:#1e293b;
   padding:15px;
-  border-radius:12px;
-  width:320px;
-  text-align:left;
 }
 
-.lead{
-  color:#22c55e;
+/* BOX */
+.box{
+  background:#1f2937;
+  padding:15px;
+  border-radius:10px;
+  width:200px;
+  text-align:center;
+  border:1px solid #374151;
+}
+
+.party{
+  font-size:18px;
   font-weight:bold;
 }
 
-/* BAR */
-.bar{
-  height:6px;
-  background:#334155;
-  border-radius:5px;
-  overflow:hidden;
-  margin:3px 0 8px 0;
-}
-
-.fill{
-  height:100%;
-  background:#22c55e;
-  width:0%;
-  transition:0.8s;
-}
-
-/* BUTTON */
-button{
-  margin:10px;
-  padding:10px 20px;
-  border:none;
-  border-radius:8px;
-  background:#22c55e;
-  color:white;
-  cursor:pointer;
-}
-
-/* PREDICTION */
-.pred{
-  font-size:12px;
+.seats{
+  font-size:30px;
+  color:#22c55e;
   margin-top:5px;
-  color:#38bdf8;
+}
+
+/* LIVE */
+.live{
+  color:#22c55e;
+  font-weight:bold;
+  margin:10px;
+  text-align:center;
 }
 
 /* FOOTER */
 footer{
-  margin-top:20px;
+  text-align:center;
+  padding:10px;
   font-size:12px;
-  color:#94a3b8;
+  color:#9ca3af;
+  margin-top:20px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>📊 WB Election FINAL BOSS Control Room</h1>
-
-<div class="brand">
-By - <b>AkashDeb</b> | Instagram - @AkashDebX
+<div class="topbar">
+🟥 LIVE ELECTION COUNTING DASHBOARD (INSPIRED NEWS STYLE)
 </div>
 
-<div class="phase" id="phase">🟡 Counting Phase 1</div>
-
-<div class="summary">
-  <div class="box">TMC <div class="seats" id="tmc">0</div></div>
-  <div class="box">BJP <div class="seats" id="bjp">0</div></div>
-  <div class="box">CPIM <div class="seats" id="cpim">0</div></div>
-  <div class="box">CONG <div class="seats" id="cong">0</div></div>
+<div class="ticker">
+<span>
+🔴 Bengal Election Live Counting • TMC vs BJP Close Fight • CPIM & Congress Trail • Updates Every 5 Seconds • District Wise Results Coming Live 🔴
+</span>
 </div>
 
-<button onclick="render()">Refresh LIVE</button>
+<div class="live">🔴 LIVE STATUS: COUNTING IN PROGRESS</div>
 
-<div class="wrapper">
+<div class="container">
 
-  <div class="map" id="map"></div>
+  <div class="box">
+    <div class="party">TMC</div>
+    <div class="seats" id="tmc">0</div>
+  </div>
 
-  <div class="detail" id="detail">
-    <h3>📍 Select Seat</h3>
-    <p>Click any seat to view AI analysis</p>
+  <div class="box">
+    <div class="party">BJP</div>
+    <div class="seats" id="bjp">0</div>
+  </div>
+
+  <div class="box">
+    <div class="party">CPIM</div>
+    <div class="seats" id="cpim">0</div>
+  </div>
+
+  <div class="box">
+    <div class="party">CONG</div>
+    <div class="seats" id="cong">0</div>
   </div>
 
 </div>
 
 <footer>
-WB Election FINAL BOSS Control Room © 2026 <br>
-Developed by <b>AkashDeb</b> | @AkashDebX
+Election Dashboard (Inspired UI) © 2026 | Developed by AkashDeb | Instagram @AkashDebX
 </footer>
 
 <script>
 
-const seats = Array.from({length:48},(_,i)=>"Seat "+(i+1));
-
-let dataStore={};
-
-let base={
-  TMC:120,
-  BJP:110,
-  CPIM:40,
-  CONG:24
-};
-
-function swing(val){
-  return val + Math.floor(Math.random()*5 - 2); // smarter swing
+function random(min,max){
+  return Math.floor(Math.random()*(max-min+1))+min;
 }
 
-function buildMap(){
-  let map=document.getElementById("map");
-  map.innerHTML="";
+function update(){
 
-  seats.forEach(s=>{
-    let div=document.createElement("div");
-    div.className="seat";
-    div.innerText=s;
-    div.onclick=()=>showDetail(s);
-    map.appendChild(div);
-  });
+  let tmc=random(120,160);
+  let bjp=random(110,150);
+  let cpim=random(10,40);
+  let cong=random(5,30);
+
+  document.getElementById("tmc").innerText=tmc;
+  document.getElementById("bjp").innerText=bjp;
+  document.getElementById("cpim").innerText=cpim;
+  document.getElementById("cong").innerText=cong;
+
 }
 
-function showDetail(s){
-
-  let v=dataStore[s];
-
-  let arr=[
-    {p:"TMC",v:v.TMC},
-    {p:"BJP",v:v.BJP},
-    {p:"CPIM",v:v.CPIM},
-    {p:"CONG",v:v.CONG}
-  ];
-
-  arr.sort((a,b)=>b.v-a.v);
-
-  let max=arr[0].v;
-
-  let total = v.TMC+v.BJP+v.CPIM+v.CONG;
-
-  let winProb = Math.round((arr[0].v/total)*100);
-
-  let html=`
-    <h3>📍 ${s}</h3>
-    <p class="lead">🏆 Winner: ${arr[0].p}</p>
-    <div class="pred">📊 Win Probability: ${winProb}%</div>
-  `;
-
-  arr.forEach(x=>{
-    let percent=(x.v/max)*100;
-
-    html+=`
-      <div>${x.p} - ${x.v}</div>
-      <div class="bar"><div class="fill" style="width:${percent}%"></div></div>
-    `;
-  });
-
-  document.getElementById("detail").innerHTML=html;
-}
-
-function render(){
-
-  let total={TMC:0,BJP:0,CPIM:0,CONG:0};
-
-  dataStore={};
-
-  seats.forEach(s=>{
-
-    let v={
-      TMC:swing(base.TMC),
-      BJP:swing(base.BJP),
-      CPIM:swing(base.CPIM),
-      CONG:swing(base.CONG)
-    };
-
-    dataStore[s]=v;
-
-    let arr=[
-      {p:"TMC",v:v.TMC},
-      {p:"BJP",v:v.BJP},
-      {p:"CPIM",v:v.CPIM},
-      {p:"CONG",v:v.CONG}
-    ];
-
-    arr.sort((a,b)=>b.v-a.v);
-
-    total[arr[0].p]++;
-  });
-
-  document.getElementById("tmc").innerText=total.TMC;
-  document.getElementById("bjp").innerText=total.BJP;
-  document.getElementById("cpim").innerText=total.CPIM;
-  document.getElementById("cong").innerText=total.CONG;
-
-  // PHASE SYSTEM
-  let phase=document.getElementById("phase");
-
-  if(total.TMC>total.BJP){
-    phase.innerText="🔴 Phase 3 - TMC Leading";
-  } else if(total.BJP>total.TMC){
-    phase.innerText="🟠 Phase 3 - BJP Leading";
-  } else {
-    phase.innerText="🟡 Phase 2 - Close Fight";
-  }
-}
-
-buildMap();
-render();
-setInterval(render,4000);
+update();
+setInterval(update,5000);
 
 </script>
 
